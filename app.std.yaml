@@ -2,7 +2,7 @@
 runtime: python27
 api_version: 1
 threadsafe: true
-service: test-5
+# service: five-by-five
 
 handlers:
 - url: /.*

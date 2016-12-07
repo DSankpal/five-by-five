@@ -21,28 +21,51 @@ def hello_world():
 def status():
     """service status"""
     statuses = {
-          'insert': False,
+          'insert': True,
           'fetch': False,
           'delete': False,
-          'list': False
+          'list': True
         }
     return json.dumps(statuses)
 
 
-@app.route('/notes', methods=['POST', 'GET'])
-def access_notes():
-    """inserts and retrieves notes from datastore"""
 
-    book = world.Capitals()
-    if request.method == 'GET':
-        results = book.fetch_notes()
-        result = [world.parse_note_time(obj) for obj in results]
-        return jsonify(result)
-    elif request.method == 'POST':
+@app.route('/api/capitals/', methods=['PUT', 'GET', 'DELETE'])
+def access_notes():
+    """inserts captials to datastore"""
+    if request.method == 'PUT':
+        id = request.args.get('id')
+        capitals = world.Capitals()
         print json.dumps(request.get_json())
-        text = request.get_json()['text']
-        book.store_note(text)
-        return "done"
+        city = request.get_json()
+        try:
+            capitals.store_capital(id, city)
+            return 'Successfully stored the capital', 200
+        except Exception as e:
+            logging.exception(e)
+            return 'Unexpected error', 400
+
+
+    elif request.method == 'GET':
+        capitals = world.Capitals()
+        try:
+            results = capitals.fetch_capitals()
+            return jsonify(results)
+        except Exception as e:
+            logging.exception(e)
+            return 'Unexpected error', 400
+
+    elif request.method == 'DELETE':
+        id = request.args.get('id')
+        cap = world.Capitals()
+        try:
+            cap.delete_capital(id)
+            return "Capital object delete status", 200
+        except AttributeError as e:
+            logging.exception(e)
+            return "Capital record not found", 404
+        except:
+            return "Unexpected error", 400
 
 
 @app.route('/pubsub/receive', methods=['POST'])
