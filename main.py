@@ -22,41 +22,42 @@ def status():
     """service status"""
     statuses = {
           'insert': True,
-          'fetch': False,
-          'delete': False,
+          'fetch': True,
+          'delete': True,
           'list': True
         }
     return json.dumps(statuses)
 
 
+@app.route('/api/capitals', methods=['GET'])
+def access_capitals():
+    """gets captials from datastore"""
+    capitals = world.Capitals()
+    results = capitals.fetch_capitals()
+    return jsonify(results)
 
-@app.route('/api/capitals/', methods=['PUT', 'GET', 'DELETE'])
-def access_notes():
-    """inserts captials to datastore"""
+
+
+@app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
+def access_capital(id):
+    """inserts, deletes and gets captials from datastore"""
     if request.method == 'PUT':
-        id = request.args.get('id')
         capitals = world.Capitals()
         print json.dumps(request.get_json())
         city = request.get_json()
-        try:
-            capitals.store_capital(id, city)
-            return 'Successfully stored the capital', 200
-        except Exception as e:
-            logging.exception(e)
-            return 'Unexpected error', 400
-
+        capitals.store_capital(id, city)
+        return 'Successfully stored the capital', 200
 
     elif request.method == 'GET':
         capitals = world.Capitals()
         try:
-            results = capitals.fetch_capitals()
+            results = capitals.fetch_capital(id)
             return jsonify(results)
-        except Exception as e:
+        except TypeError as e:
             logging.exception(e)
-            return 'Unexpected error', 400
+            return "Capital record not found", 404
 
     elif request.method == 'DELETE':
-        id = request.args.get('id')
         cap = world.Capitals()
         try:
             cap.delete_capital(id)
@@ -64,8 +65,6 @@ def access_notes():
         except AttributeError as e:
             logging.exception(e)
             return "Capital record not found", 404
-        except:
-            return "Unexpected error", 400
 
 
 @app.route('/pubsub/receive', methods=['POST'])
