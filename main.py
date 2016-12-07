@@ -11,11 +11,22 @@ import utility
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def hello_world():
     """hello world"""
     return 'Hello World!'
+
+
+@app.route('/api/status')
+def status():
+    """service status"""
+    statuses = {
+          'insert': False,
+          'fetch': False,
+          'delete': False,
+          'list': False
+        }
+    return json.dumps(statuses)
 
 
 @app.route('/notes', methods=['POST', 'GET'])
