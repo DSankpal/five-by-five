@@ -18,8 +18,6 @@ class Capitals:
         if city is not None:
             ps = mypubsub.PubSub()
             utility.log_info('TOPIC = ' + topicname)
-            if '/' in topicname
-
             return ps.publish(topicname, city)
 
 
