@@ -1,8 +1,8 @@
 import json
 import utility
+import cloudstorage
 
 from google.cloud import datastore
-
 
 
 class Capitals:
@@ -10,6 +10,20 @@ class Capitals:
     def __init__(self):
         self.ds = datastore.Client(project=utility.project_id())
         self.kind = "newworld"
+
+
+    def store_capital_gcs(self, city_id, bucketname):
+        # Check if the id exists in datastore
+        # raises TypeError if city_id not in DataStore
+        city = self.fetch_capital(city_id)
+        if city is not None:
+            cloudstore = cloudstorage.Storage()
+            created = cloudstore.create_bucket(bucketname)
+            if created is not None and created:
+                cloudstore.store_json_to_gcs(bucketname, city)
+            else:
+                raise TypeError
+        return True
 
 
     def store_capital(self, city_id, city):
@@ -31,6 +45,7 @@ class Capitals:
         query = self.ds.query(kind=self.kind)
         query.order = ['id']
         return self.get_query_results(query)
+
 
     def fetch_capital(self, city_id):
         key = self.ds.key(self.kind, int(city_id))

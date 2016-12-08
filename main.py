@@ -24,7 +24,11 @@ def status():
           'insert': True,
           'fetch': True,
           'delete': True,
-          'list': True
+          'list': True,
+          'storage': True,
+          'pubsub': False,
+          'query': False,
+          'search': False
         }
     return json.dumps(statuses)
 
@@ -65,6 +69,22 @@ def access_capital(id):
         except AttributeError as e:
             logging.exception(e)
             return "Capital record not found", 404
+
+
+
+@app.route('/api/capitals/<id>/store', methods=['POST'])
+def store_capital_gcs(id):
+    """stores captials to google cloud storage"""
+    capitals = world.Capitals()
+    print json.dumps(request.get_json())
+    bucketname = request.get_json()['bucket']
+    try:
+        if capitals.store_capital_gcs(id, bucketname):
+            return 'Successfully stored in GCS', 200
+    except TypeError as e:
+        logging.exception(e)
+        return "Capital record not found", 404
+
 
 
 @app.route('/pubsub/receive', methods=['POST'])

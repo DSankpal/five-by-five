@@ -10,6 +10,10 @@ def project_id():
     return _helpers._determine_default_project()
 
 
+def bucketobject_name():
+    """Returns the bucket name as <project>_capitals"""
+    return _helpers._determine_default_project() + '_capitals.json'
+
 def on_cloud():
     """Returns whether the app is running on google"""
     return os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/')
