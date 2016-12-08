@@ -35,11 +35,19 @@ def status():
 
 @app.route('/api/capitals', methods=['GET'])
 def access_capitals():
-    """gets captials from datastore"""
+    """gets captials from datastore -- with query"""
     capitals = world.Capitals()
-    results = capitals.fetch_capitals()
-    return jsonify(results)
 
+    query = request.args.get('query')
+    search = request.args.get('search')
+    if query is not None and query:
+        property_name, value = query.split(':')
+        results = capitals.query_capitals(property_name, value)
+    elif search is not None and search:
+        results = capitals.search_capitals(search)
+    else:
+        results = capitals.fetch_capitals()
+    return jsonify(results)
 
 
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
@@ -93,7 +101,7 @@ def pubsub_publish(id):
     topicname = request.get_json()['topic']
     try:
         message_id = capitals.publish_capital(id, topicname)
-        return json.dumps({"messageId":message_id}), 200
+        return json.dumps({'messageId': long(message_id)}, indent=2), 200
     except TypeError as e:
         logging.exception(e)
         return "Capital record not found", 404

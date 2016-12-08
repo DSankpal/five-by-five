@@ -7,8 +7,8 @@ from google.cloud import _helpers
 
 def project_id():
     """Returns the current google project"""
+    x = _helpers._determine_default_project()
     return _helpers._determine_default_project()
-
 
 def bucketobject_name():
     """Returns the bucket name as <project>_capitals"""
