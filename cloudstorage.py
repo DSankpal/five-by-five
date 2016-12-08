@@ -2,6 +2,7 @@ import json
 
 from google.cloud import storage, exceptions
 from google.cloud.storage import Blob
+from google.cloud.storage.acl import ACL
 
 import utility
 
@@ -44,6 +45,7 @@ class Storage:
     def store_json_to_gcs(self, bucket_name, capital_json, city_id):
         bucket = self.gcs.get_bucket(bucket_name)
         blob = bucket.blob(str(city_id))
+        # blob.acl = ACL.all() # bucket.acl   # {'entity': 'allAuthenticatedUsers', 'role': 'OWNER'}
         return blob.upload_from_string(data=json.dumps(capital_json))
 
     def store_file_to_gcs(self, bucket_name, filename):

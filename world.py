@@ -17,6 +17,9 @@ class Capitals:
         city = self.fetch_capital(city_id)
         if city is not None:
             ps = mypubsub.PubSub()
+            utility.log_info('TOPIC = ' + topicname)
+            if '/' in topicname
+
             return ps.publish(topicname, city)
 
 
@@ -26,9 +29,9 @@ class Capitals:
         city = self.fetch_capital(city_id)
         if city is not None:
             cloudstore = cloudstorage.Storage()
-            #created = cloudstore.create_bucket(bucketname)
-            #if created is not None and created:
-            cloudstore.store_json_to_gcs(bucketname, city, city_id)
+            created = cloudstore.create_bucket(bucketname)
+            if created is not None and created:
+                cloudstore.store_json_to_gcs(bucketname, city, city_id)
         return True
 
 

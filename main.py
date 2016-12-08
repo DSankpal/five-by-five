@@ -26,9 +26,9 @@ def status():
           'delete': True,
           'list': True,
           'storage': True,
-          'pubsub': False,
-          'query': False,
-          'search': False
+          'pubsub': True,
+          'query': True,
+          'search': True
         }
     return json.dumps(statuses)
 
