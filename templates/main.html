@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<title>Country Capitals of the world - Five-by-Five</title>
+<center><h1> Country Capitals of the world </h1></center>
+<HR>
+<table border="1">
+    <tr>
+        <th>Country</th>
+        <th>Capital</th>
+        <BR>
+    </tr>
+    {% if results %}
+        {% for country, capital in results.items() %}
+            <tr>
+                <td>{{ country }}</td>
+                <td>{{ capital }}</td>
+                <BR>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+

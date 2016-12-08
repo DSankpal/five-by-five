@@ -1,15 +1,16 @@
 """Main Entrypoint for the Application"""
-import base64
 import logging
 import json
 
 from flask import Flask, request
 from flask import jsonify
 
+import api
 import world
-import utility
+
 
 app = Flask(__name__)
+app.register_blueprint(api.api)
 
 @app.route('/')
 def hello_world():

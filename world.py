@@ -51,7 +51,20 @@ class Capitals:
     def fetch_capitals(self):
         query = self.ds.query(kind=self.kind)
         query.order = ['id']
-        return self.get_query_results(query)
+        result = self.get_query_results(query)
+        num_return = min(20, len(result))
+        return result[:num_return]
+
+    def fetch_countries_and_capitals(self):
+        query = self.ds.query(kind=self.kind)
+        query.order = ['country']
+        results = {}
+        for entity in list(query.fetch()):
+            x = Capitals.change_location(dict(entity))
+            results[x['country']] = x['name']
+        # print results
+        return results
+
 
     def query_capitals(self, property_name, value):
         query = self.ds.query(kind=self.kind)
@@ -61,10 +74,14 @@ class Capitals:
     def search_capitals(self, searchstring):
         query = self.ds.query(kind=self.kind)
         results = list()
+        count = 0
         for entity in list(query.fetch()):
             if searchstring in json.dumps(dict(entity)):
+                count += 1
                 x = Capitals.change_location(dict(entity))
                 results.append(x)
+            if count > 19:
+                break
         return results
 
     def fetch_capital(self, city_id):
