@@ -23,7 +23,7 @@ class Storage:
             return None
         except exceptions.Forbidden:
             print ('Error: Forbidden, Access denied for bucket {}'.format(bucket_name))
-            return None
+            raise exceptions.Forbidden
 
 
     def create_bucket(self, bucket_name):
@@ -41,9 +41,9 @@ class Storage:
         return bucket_exists
 
 
-    def store_json_to_gcs(self, bucket_name, capital_json):
+    def store_json_to_gcs(self, bucket_name, capital_json, city_id):
         bucket = self.gcs.get_bucket(bucket_name)
-        blob = bucket.blob(utility.bucketobject_name())
+        blob = bucket.blob(str(city_id))
         return blob.upload_from_string(data=json.dumps(capital_json))
 
     def store_file_to_gcs(self, bucket_name, filename):

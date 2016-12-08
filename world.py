@@ -2,14 +2,22 @@ import json
 import utility
 import cloudstorage
 
+from google.cloud import exceptions
 from google.cloud import datastore
 
+import mypubsub
 
 class Capitals:
 
     def __init__(self):
         self.ds = datastore.Client(project=utility.project_id())
         self.kind = "newworld"
+
+    def publish_capital(self, city_id, topicname):
+        city = self.fetch_capital(city_id)
+        if city is not None:
+            ps = mypubsub.PubSub()
+            return ps.publish(topicname, city)
 
 
     def store_capital_gcs(self, city_id, bucketname):
@@ -18,11 +26,9 @@ class Capitals:
         city = self.fetch_capital(city_id)
         if city is not None:
             cloudstore = cloudstorage.Storage()
-            created = cloudstore.create_bucket(bucketname)
-            if created is not None and created:
-                cloudstore.store_json_to_gcs(bucketname, city)
-            else:
-                raise TypeError
+            #created = cloudstore.create_bucket(bucketname)
+            #if created is not None and created:
+            cloudstore.store_json_to_gcs(bucketname, city, city_id)
         return True
 
 

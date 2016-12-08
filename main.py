@@ -76,7 +76,7 @@ def access_capital(id):
 def store_capital_gcs(id):
     """stores captials to google cloud storage"""
     capitals = world.Capitals()
-    print json.dumps(request.get_json())
+    # print json.dumps(request.get_json())
     bucketname = request.get_json()['bucket']
     try:
         if capitals.store_capital_gcs(id, bucketname):
@@ -87,17 +87,16 @@ def store_capital_gcs(id):
 
 
 
-@app.route('/pubsub/receive', methods=['POST'])
-def pubsub_receive():
-    data = {}
+@app.route('/api/capitals/<id>/publish', methods=['POST'])
+def pubsub_publish(id):
+    capitals = world.Capitals();
+    topicname = request.get_json()['topic']
     try:
-        obj = request.get_json()
-        utility.log_info(json.dumps(obj))
-        data = base64.b64decode(obj['message']['data'])
-        utility.log_info(data)
-    except Exception as e:
+        message_id = capitals.publish_capital(id, topicname)
+        return json.dumps({"messageId":message_id}), 200
+    except TypeError as e:
         logging.exception(e)
-    return jsonify(data), 200
+        return "Capital record not found", 404
 
 
 @app.errorhandler(500)
