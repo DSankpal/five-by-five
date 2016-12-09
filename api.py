@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
-
 import world
+
 
 api = Blueprint('capitals', __name__)
 
@@ -15,4 +15,4 @@ def main_page():
     # for k, v in results.items():
     #     x.append([k, v])
     if request.method == 'GET':
-        return render_template('main.html', comment=None, results=results)
+        return render_template('main.html', comment=None, results=sorted(results.items()))

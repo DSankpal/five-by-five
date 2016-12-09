@@ -52,7 +52,7 @@ class Capitals:
         query = self.ds.query(kind=self.kind)
         query.order = ['id']
         result = self.get_query_results(query)
-        num_return = min(20, len(result))
+        num_return = min(19, len(result))
         return result[:num_return]
 
     def fetch_countries_and_capitals(self):

@@ -6,14 +6,12 @@
     <tr>
         <th>Country</th>
         <th>Capital</th>
-        <BR>
     </tr>
     {% if results %}
-        {% for country, capital in results.items() %}
+        {% for country_cap in results %}
             <tr>
-                <td>{{ country }}</td>
-                <td>{{ capital }}</td>
-                <BR>
+                <td>{{ country_cap[0] }}</td>
+                <td>{{ country_cap[1] }}</td>
             </tr>
         {% endfor %}
     {% endif %}
