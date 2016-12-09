@@ -69,7 +69,7 @@ class Capitals:
                 count += 1
                 x = Capitals.change_location(dict(entity))
                 results.append(x)
-            if count > 19:
+            if count > 20:
                 break
         return results
 

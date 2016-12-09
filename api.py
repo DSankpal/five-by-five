@@ -22,8 +22,8 @@ def map_page():
 
     capitals = world.Capitals()
     results = capitals.fetch_capital_locations()
-    num_return = min(19, len(results))
+    # num_return = min(19, len(results))
     # first20orless = {k: results[k] for k in results.keys()[:num_return]}
     if request.method == 'GET':
-        return render_template('googlemap.html', comment=None, results=results[:num_return])
+        return render_template('googlemap.html', comment=None, results=results)
 
