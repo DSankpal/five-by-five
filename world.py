@@ -52,6 +52,7 @@ class Capitals:
         query = self.ds.query(kind=self.kind)
         query.order = ['id']
         result = self.get_query_results(query)
+        # Limit number of items returned to 20
         num_return = min(19, len(result))
         return result[:num_return]
 
@@ -64,7 +65,7 @@ class Capitals:
             results[x['country']] = x['name']
         return results
 
-    def fetch_captial_locations(self):
+    def fetch_capital_locations(self):
         query = self.ds.query(kind=self.kind)
         results = list()
         for entity in list(query.fetch()):
