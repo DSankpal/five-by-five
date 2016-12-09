@@ -16,3 +16,11 @@ def main_page():
     #     x.append([k, v])
     if request.method == 'GET':
         return render_template('main.html', comment=None, results=results)
+
+@api.route('/map', methods=['GET'])
+def map_page():
+
+    capitals = world.Capitals()
+    results = capitals.fetch_captial_locations()
+    if request.method == 'GET':
+        return render_template('googlemap.html', comment=None, results=results)
