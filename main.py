@@ -47,7 +47,7 @@ def access_capitals():
     elif search is not None and search:
         results = capitals.search_capitals(search)
     else:
-        results = capitals.fetch_capitals()
+        results = capitals.fetch_capitals_new() #fetch_capitals()
     return jsonify(results)
 
 
