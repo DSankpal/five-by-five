@@ -62,9 +62,15 @@ class Capitals:
         for entity in list(query.fetch()):
             x = Capitals.change_location(dict(entity))
             results[x['country']] = x['name']
-        # print results
         return results
 
+    def fetch_captial_locations(self):
+        query = self.ds.query(kind=self.kind)
+        results = list()
+        for entity in list(query.fetch()):
+            x = dict(entity)
+            results.append([x['name'], x['latitude'], x['longitude']])
+        return results
 
     def query_capitals(self, property_name, value):
         query = self.ds.query(kind=self.kind)
